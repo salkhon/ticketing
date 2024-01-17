@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: ticketing-auth
-          image: salkhon/ticketing-auth
+          image: us.gcr.io/ticketing-dev-411513/auth
 ---
 apiVersion: v1
 kind: Service
