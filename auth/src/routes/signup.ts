@@ -16,7 +16,8 @@ router.post(
 			.withMessage("Password must be between 4 and 20 characters"),
 	],
 	(req: Request, res: Response) => {
-		const errors = validationResult(req); // validation failure attaches message property to req object
+		// validation failure attaches message property to req object
+		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			throw new RequestValidationError(errors.array());
 		}
