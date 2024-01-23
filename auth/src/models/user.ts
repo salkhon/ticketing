@@ -5,16 +5,30 @@ import { Password } from "../services/password";
  * These are boilerplate code to enhace mongoose models with TypeScript typing
  */
 
-const userSchema = new mongoose.Schema({
-	email: {
-		type: String, // capital String is a JS constructor function, not TS type string
-		required: true,
+const userSchema = new mongoose.Schema(
+	{
+		email: {
+			type: String, // capital String is a JS constructor function, not TS type string
+			required: true,
+		},
+		password: {
+			type: String,
+			required: true,
+		},
 	},
-	password: {
-		type: String,
-		required: true,
-	},
-});
+	{
+		// mongoose toJSON transform option to normalize returned object (user here)
+		// from _id to id, and remove password and __v
+		toJSON: {
+			transform(doc, ret) {
+				ret.id = ret._id;
+				delete ret._id;
+				delete ret.password;
+			},
+			versionKey: false, // remove __v
+		},
+	}
+);
 
 // mongoose middleware to hash password before saving
 userSchema.pre("save", async function (done) {

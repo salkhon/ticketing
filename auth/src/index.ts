@@ -34,6 +34,11 @@ app.all("*", async () => {
 app.use(errorHandler);
 
 function start() {
+	// if secrets are not defined, throw error at the start of the app
+	if (!process.env.JWT_KEY) {
+		throw new Error("JWT_KEY must be defined");
+	}
+
 	try {
 		// connect to mongodb pod services using service name:port as URL/database
 		mongoose.connect("mongodb://ticketing-auth-mongo-srv:27017/auth");

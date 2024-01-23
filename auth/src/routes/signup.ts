@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
-import { RequestValidationError } from "../errors/req-validation-error";
 import { BadRequestError } from "../errors/bad-request-error";
+import { validateRequest } from "../middlewares/validate-request";
 
 const router = express.Router();
 
@@ -17,13 +17,8 @@ router.post(
 			.isLength({ min: 4, max: 20 })
 			.withMessage("Password must be between 4 and 20 characters"),
 	],
+	validateRequest, // custom middleware to check for validation errors
 	async (req: Request, res: Response) => {
-		// validation failure attaches message property to req object
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			throw new RequestValidationError(errors.array());
-		}
-
 		// check if user already exists
 		const { email, password } = req.body;
 		const existingUser = await User.findOne({ email });
@@ -41,7 +36,7 @@ router.post(
 				id: user.id,
 				email: user.email,
 			},
-			"secret"
+			process.env.JWT_KEY! // Here ! tells TS that we have already checked for undefined
 		);
 
 		// store JWT on cookie session object
@@ -50,7 +45,7 @@ router.post(
 			jwt: userJwt,
 		};
 
-		res.status(201).send(user);
+		res.status(201).send(user); // user document is normalized by `toJSON` in the Schema
 	}
 );
 
