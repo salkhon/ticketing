@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 import { Password } from "../services/password";
 
+/**
+ * These are boilerplate code to enhace mongoose models with TypeScript typing
+ */
+
 const userSchema = new mongoose.Schema({
 	email: {
 		type: String, // capital String is a JS constructor function, not TS type string
