@@ -28,7 +28,7 @@ router.post(
 		}
 
 		// check if password is correct
-		if (!Password.compare(existingUser.password, password)) {
+		if (!(await Password.compare(existingUser.password, password))) {
 			throw new BadRequestError("Invalid credentials");
 		}
 

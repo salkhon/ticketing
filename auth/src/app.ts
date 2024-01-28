@@ -16,8 +16,10 @@ app.set("trust proxy", true); // trust traffic from ingress-nginx proxy
 app.use(json());
 app.use(
 	cookieSession({
-		signed: false, // disable encryption
-		secure: true, // only send cookie over HTTPS, cookie will not be sent over HTTP
+		// disable encryption
+		signed: false,
+		// only send cookie over HTTPS, cookie will not be sent over HTTP (When not in test environment)
+		secure: process.env.NODE_ENV !== "test",
 	})
 );
 
