@@ -3,12 +3,20 @@ kind: Config
 metadata:
   name: ticketing-dev
 build:
-  artifacts:
+  artifacts: # syncing
     - image: salkhon/ticketing-auth
       context: auth
       sync:
         manual:
           - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: salkhon/ticketing-client
+      context: client
+      sync:
+        manual:
+          - src: "**/*.{ts,tsx,js,jsx}"
             dest: .
       docker:
         dockerfile: Dockerfile
