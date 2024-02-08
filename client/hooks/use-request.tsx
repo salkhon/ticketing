@@ -1,6 +1,6 @@
 "use client";
-import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
+import "../app/globals.css";
 
 export default function useRequest({
 	url,
@@ -8,32 +8,36 @@ export default function useRequest({
 	onSuccess,
 }: {
 	url: string;
-	method: "get" | "post" | "put" | "delete";
-	onSuccess: (resp: AxiosResponse) => void;
+	method: "GET" | "POST" | "PUT" | "DELETE";
+	onSuccess: (resp: Response) => void;
 }) {
 	const [errors, setErrors] = useState(null);
 
 	async function doRequest(body: object) {
 		try {
-			const resp = await axios.request({
+			const resp = await fetch(url, {
 				method,
-				url,
-				data: body,
+				body: JSON.stringify(body),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			});
-			
-      setErrors(null);
 
-			if (onSuccess) {
-				onSuccess(resp.data);
+			if (!resp.ok) {
+				throw await resp.json();
 			}
-      
-			return resp.data;
+
+			setErrors(null);
+			if (onSuccess) {
+				onSuccess(resp);
+			}
+			return resp.json();
 		} catch (err) {
 			setErrors(
 				<div className="border rounded-lg border-red-500 p-3 mb-2">
 					<h4 className="text-red-500">Ooops...</h4>
 					<ul className="list-disc ml-7 text-red-500">
-						{err.response.data.errors.map((err, idx) => (
+						{err.errors.map((err, idx) => (
 							<li key={idx}>{err.message}</li>
 						))}
 					</ul>

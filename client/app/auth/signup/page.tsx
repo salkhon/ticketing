@@ -1,6 +1,6 @@
 "use client";
 import { useRef } from "react";
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../../hooks/use-request";
 import { useRouter } from "next/navigation";
 
 export default function Signup() {
@@ -10,16 +10,16 @@ export default function Signup() {
 
 	const { doRequest, errors } = useRequest({
 		url: "/api/users/signup",
-		method: "post",
+		method: "POST",
 		onSuccess: () => router.push("/"),
 	});
 
-	async function onFormSubmit(event: React.FormEvent<HTMLFormElement>) {
+	function onFormSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		const email = emailRef.current!.value;
 		const password = passwordRef.current!.value;
 
-		await doRequest({ email, password });
+		doRequest({ email, password });
 	}
 
 	return (
