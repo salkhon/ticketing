@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import "../app/globals.css";
+import "../globals.css";
 
 export default function useRequest({
 	url,
