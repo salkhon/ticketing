@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { getCurrentUser } from "./data/getCurrentUser";
-import Navigation from "./components/Navigation";
 
 export const metadata: Metadata = {
 	title: "Ticketing App",
@@ -13,12 +11,9 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const currentUser = await getCurrentUser();
-
 	return (
 		<html lang="en">
 			<body suppressHydrationWarning={true}>
-				<Navigation currentUser={currentUser} />
 				{children}
 			</body>
 		</html>

@@ -9,7 +9,7 @@ export default function useRequest({
 }: {
 	url: string;
 	method: "GET" | "POST" | "PUT" | "DELETE";
-	onSuccess: (resp: Response) => void;
+	onSuccess?: ((resp: Response) => void) | undefined;
 }) {
 	const [errors, setErrors] = useState(null);
 

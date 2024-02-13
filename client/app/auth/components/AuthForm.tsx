@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import useRequest from "../../hooks/use-request";
-import { revalidatePath } from "next/cache";
+import currentUserRevalidate from "../actions";
 
 export default function AuthForm({
 	title,
@@ -18,16 +18,14 @@ export default function AuthForm({
 	const { doRequest, errors } = useRequest({
 		url: postUrl,
 		method: "POST",
-		onSuccess: () => {
-			router.push("/");
-		},
+		onSuccess: () => router.push("/"),
 	});
 
-	function onFormSubmit(event: React.FormEvent<HTMLFormElement>) {
+	async function onFormSubmit(event: React.FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		const email = emailRef.current!.value;
 		const password = passwordRef.current!.value;
-
+		await currentUserRevalidate();
 		doRequest({ email, password });
 	}
 
