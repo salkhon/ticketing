@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketing-tickets-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketing-tickets-mongo
+  template:
+    metadata:
+      labels:
+        app: ticketing-tickets-mongo
+    spec:
+      containers:
+        - name: ticketing-tickets-mongo
+          image: mongo # from docker hub
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketing-tickets-mongo-srv
+spec:
+  selector:
+    app: ticketing-tickets-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017 # default port for mongodb
+      targetPort: 27017
