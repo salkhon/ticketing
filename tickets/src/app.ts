@@ -1,7 +1,8 @@
 import express, { json } from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
-import { errorHandler, NotFoundError } from "@salkhon-ticketing/common";
+import { errorHandler, NotFoundError, currentUser } from "@salkhon-ticketing/common";
+import { createTicketRouter } from "./routes/new";
 
 export const app = express();
 
@@ -15,8 +16,13 @@ app.use(
 		secure: process.env.NODE_ENV !== "test",
 	})
 );
+app.use(currentUser); // must be after cookieSession, so that it can check the cookie
 
 // Route handlers
+app.use(createTicketRouter);
+app.all("*", async () => {
+	throw new NotFoundError();
+});
 
 // all other routes for all other methods
 app.all("*", async () => {
