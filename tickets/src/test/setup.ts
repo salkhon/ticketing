@@ -31,11 +31,15 @@ afterAll(async () => {
 	await mongoose.connection.close();
 });
 
+export function generateId() {
+	return new mongoose.Types.ObjectId().toHexString();
+}
+
 // test utility function to sign up a user and get cookie for supertest (as you would get on the request header)
 export function signin() {
 	// Build a JWT payload. {id, email}
 	const payload = {
-		id: "iubw4987t324",
+		id: generateId(),
 		email: "test@test.com",
 	};
 

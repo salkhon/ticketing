@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import { Password } from "../services/password";
 
 /**
- * These are boilerplate code to enhace mongoose models with TypeScript typing
+ * @deprecated
+ * These are **LEGACY** boilerplate code to enhace mongoose models with TypeScript typing
  */
 
 const userSchema = new mongoose.Schema(

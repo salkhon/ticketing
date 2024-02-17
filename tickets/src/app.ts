@@ -1,8 +1,15 @@
 import express, { json } from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
-import { errorHandler, NotFoundError, currentUser } from "@salkhon-ticketing/common";
+import {
+	errorHandler,
+	NotFoundError,
+	currentUser,
+} from "@salkhon-ticketing/common";
 import { createTicketRouter } from "./routes/new";
+import { showTicketRouter } from "./routes/show";
+import { indexTicketRouter } from "./routes";
+import { updateTicketRouter } from "./routes/update";
 
 export const app = express();
 
@@ -20,11 +27,9 @@ app.use(currentUser); // must be after cookieSession, so that it can check the c
 
 // Route handlers
 app.use(createTicketRouter);
-app.all("*", async () => {
-	throw new NotFoundError();
-});
-
-// all other routes for all other methods
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 app.all("*", async () => {
 	throw new NotFoundError();
 });
