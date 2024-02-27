@@ -14,20 +14,15 @@ spec:
     spec:
       containers:
         - name: nats
-          image: nats-streaming:latest
+          image: nats:alpine
           args: [
-              "-p",
-              "4222",
+              "-js",
               "-m",
               "8222",
-              "-hbi",
-              "5s",
-              "-hbt",
-              "5s",
-              "-hbf",
-              "2",
-              "-SD",
-              "-cid",
+              "-p",
+              "4222",
+              "-DV",
+              "--cluster_name",
               "ticketing",
             ] # command line options when starting the container
 ---
