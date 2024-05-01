@@ -23,6 +23,9 @@ router.post(
 			userId: req.currentUser!.id,
 		});
 		await ticket.save();
+    
+		// while publishing an event, use the data from the model - not the request body
+		// this is because the model may have sanitized the data via a mongoose pre-save hook
 
 		res.status(201).send(ticket);
 	}
