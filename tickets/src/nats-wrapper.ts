@@ -1,7 +1,7 @@
 import { NatsConnection, connect } from "nats";
 
 class NATSWrapper {
-	private client?: NatsConnection; // here ? means that it is optional (lazy initialization)
+	private _client?: NatsConnection; // here ? means that it is optional (lazy initialization)
 
 	/**
 	 * Connect to the NATS server
@@ -13,7 +13,7 @@ class NATSWrapper {
 	 */
 	async connect(clusterName: string, url: string) {
 		try {
-			this.client = await connect({
+			this._client = await connect({
 				servers: url,
 				name: clusterName,
 			});
@@ -23,12 +23,28 @@ class NATSWrapper {
 		}
 	}
 
-	getClient() {
-		if (!this.client) {
+	/**
+	 * Get the NATS client
+	 * @returns NatsConnection
+	 * @throws Error
+	 */
+	get client() {
+		if (!this._client) {
 			throw new Error("Cannot access NATS client before connecting");
 		}
 
-		return this.client;
+		return this._client;
+	}
+
+	/**
+	 * Drain the connection to the NATS server
+	 * @returns void
+	 * @throws Error
+	 * @async
+	 */
+	async drain() {
+		await this.client.drain();
+		console.log("NATS connection drained");
 	}
 }
 
