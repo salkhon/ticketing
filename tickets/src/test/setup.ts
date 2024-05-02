@@ -2,6 +2,8 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
+jest.mock("../nats-wrapper.ts"); // redirect all imports of the 'nats-wrapper' module to the mock file
+
 let mongo: MongoMemoryServer;
 
 // hook function that runs before all tests
@@ -16,6 +18,9 @@ beforeAll(async () => {
 
 // hook function that runs before each test
 beforeEach(async () => {
+  // reset all mocks (to accurately test the number of times a function was called)
+  jest.clearAllMocks();
+  
 	// delete all collections
 	const collections = await mongoose.connection.db.collections();
 	for (let collection of collections) {

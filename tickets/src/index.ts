@@ -14,10 +14,16 @@ async function start() {
 	if (!process.env.MONGO_URI) {
 		throw new Error("MONGO_URI must be defined");
 	}
+	if (!process.env.CLUSTER_NAME) {
+		throw new Error("CLUSTER_NAME must be defined");
+	}
+	if (!process.env.NATS_URL) {
+		throw new Error("NATS_URL must be defined");
+	}
 
 	try {
 		// cluster name and url depends on the nats.yaml file used to setup the NATS depl and service
-		await natsWrapper.connect("ticketing", "ticketing-nats-srv:4222");
+		await natsWrapper.connect(process.env.CLUSTER_NAME, process.env.NATS_URL);
 		// if NATS goes down - the publisher needs to go down as well
 		natsWrapper.connection.closed().then(() => {
 			console.log("NATS connection dropped - exiting ticketing service");
