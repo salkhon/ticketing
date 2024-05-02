@@ -18,7 +18,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@salkhon-ticketing/common": "^1.0.8",
+		"@salkhon-ticketing/common": "^1.0.11",
 		"@types/bcrypt": "^5.0.2",
 		"@types/cookie-session": "^2.0.48",
 		"@types/express": "^4.17.21",

@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
-
-import { app } from "./app";
 import { natsWrapper } from "./nats-wrapper";
-import TicketCreatedPublisher from "./events/publishers/ticket-created-publisher";
+import { app } from "./app";
 
+/**
+ * Setup environment variables, connect to external services and start the app
+ * @returns void
+ */
 async function start() {
 	// if secrets are not defined, throw error at the start of the app
 	if (!process.env.JWT_KEY) {
@@ -17,15 +19,13 @@ async function start() {
 		// cluster name and url depends on the nats.yaml file used to setup the NATS depl and service
 		await natsWrapper.connect("ticketing", "ticketing-nats-srv:4222");
 		// if NATS goes down - the publisher needs to go down as well
-		natsWrapper.client.closed().then(() => {
+		natsWrapper.connection.closed().then(() => {
 			console.log("NATS connection dropped - exiting ticketing service");
 			process.exit();
 		});
 		// graceful NATS drain on service termination
 		process.on("SIGINT", () => natsWrapper.drain());
 		process.on("SIGTERM", () => natsWrapper.drain());
-    // register publisher stream
-    new TicketCreatedPublisher(natsWrapper.client).registerStream();
 
 		// connect to mongodb pod services using service name:port as URL/database
 		await mongoose.connect(process.env.MONGO_URI);

@@ -34,4 +34,5 @@ app.all("*", async () => {
 	throw new NotFoundError();
 });
 
+// Error handler
 app.use(errorHandler);
