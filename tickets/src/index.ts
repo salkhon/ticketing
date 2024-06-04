@@ -26,7 +26,7 @@ async function start() {
 		await natsWrapper.connect(process.env.CLUSTER_NAME, process.env.NATS_URL);
 		// if NATS goes down - the publisher needs to go down as well
 		natsWrapper.connection.closed().then(() => {
-			console.log("NATS connection dropped - exiting ticketing service");
+			console.log("NATS connection dropped - exiting TICKETS service");
 			process.exit();
 		});
 		// graceful NATS drain on service termination
