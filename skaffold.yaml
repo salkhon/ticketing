@@ -28,6 +28,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+    - image: salkhon/ticketing-orders
+      context: orders
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
   local:
     push: false
 manifests:

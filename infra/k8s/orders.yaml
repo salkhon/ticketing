@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ticketing-tickets-depl
+  name: ticketing-orders-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ticketing-tickets
+      app: ticketing-orders
   template:
     metadata:
       labels:
-        app: ticketing-tickets
+        app: ticketing-orders
     spec:
       containers:
-        - name: ticketing-tickets
-          image: salkhon/ticketing-tickets
+        - name: ticketing-orders
+          image: salkhon/ticketing-orders # for GCP, use gcr.io/PROJECT-ID/image-name
           env:
             - name: MONGO_URI
-              value: mongodb://ticketing-tickets-mongo-srv:27017/tickets
+              value: mongodb://ticketing-orders-mongo-srv:27017/orders
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -35,13 +35,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ticketing-tickets-srv
+  name: ticketing-orders-srv
 spec:
   # default type is ClusterIP
   selector:
-    app: ticketing-tickets
+    app: ticketing-orders
   ports:
-    - name: ticketing-tickets
+    - name: ticketing-orders
       protocol: TCP
       port: 3000
       targetPort: 3000
