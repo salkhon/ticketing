@@ -23,6 +23,14 @@ spec:
                 name: ticketing-tickets-srv
                 port:
                   number: 3000
+          - path: /api/orders/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ticketing-orders-srv
+                port:
+                  number: 3000
+          # client needs to be at the bottom
           - path: /?(.*)
             pathType: ImplementationSpecific
             backend:
