@@ -9,7 +9,7 @@ import {
 import { indexOrderRouter } from "./routes";
 import { newOrderRouter } from "./routes/new";
 import { showOrderRouter } from "./routes/show";
-import { deleteOrderRouter } from "./routes/delete";
+import { patchOrderRouter } from "./routes/patch";
 
 export const app = express();
 
@@ -29,7 +29,7 @@ app.use(currentUser); // must be after cookieSession, so that it can check the c
 app.use(indexOrderRouter);
 app.use(newOrderRouter);
 app.use(showOrderRouter);
-app.use(deleteOrderRouter);
+app.use(patchOrderRouter);
 app.all("*", async () => {
 	throw new NotFoundError();
 });
