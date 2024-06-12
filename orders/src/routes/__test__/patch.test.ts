@@ -4,6 +4,7 @@ import { signin } from "../../test/setup";
 import { Ticket } from "../../models/ticket";
 import { OrderStatus } from "@salkhon-ticketing/common";
 import { Order } from "../../models/order";
+import { natsWrapper } from "../../nats-wrapper";
 
 // todo: test auth, params, order not found, not authorized, valid input
 
@@ -38,4 +39,30 @@ it("marks an order as cancelled", async () => {
 	expect(updatedOrder!.status).toEqual(OrderStatus.CANCELLED);
 });
 
-it.todo("emits an order cancelled event");
+it("emits an order cancelled event", async () => {
+	const cookie = signin();
+
+	// create a ticket
+	const ticket = new Ticket({
+		title: "concert",
+		price: 20,
+	});
+	await ticket.save();
+
+	// order the ticket
+	const { body: order } = await request(app)
+		.post("/api/orders")
+		.set("Cookie", cookie)
+		.send({ ticketId: ticket.id })
+		.expect(201);
+
+	// cancel the order
+	await request(app)
+		.patch(`/api/orders/${order.id}`)
+		.set("Cookie", cookie)
+		.send()
+		.expect(200);
+
+	// expect event to be published
+	expect(natsWrapper.connection.jetstream).toHaveBeenCalled();
+});

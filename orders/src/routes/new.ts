@@ -8,6 +8,8 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { Ticket } from "../models/ticket";
 import { Order } from "../models/order";
+import { natsWrapper } from "../nats-wrapper";
+import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 
 const EXPIRATION_WINDOW_SECONDS = 15; // should be (env variable/in admin DB) to avoid deploying on every change
 
@@ -54,7 +56,18 @@ router.post(
 		});
 		await order.save();
 
-		// todo: publish order creation event
+		// publish order creation event
+		new OrderCreatedPublisher(natsWrapper.connection).publish({
+			id: order.id,
+			status: order.status,
+			userId: order.userId,
+			expiresAt: order.expiresAt.toISOString(),
+			ticket: {
+				id: ticket.id,
+				price: ticket.price,
+			},
+		});
+
 		res.status(201).send(order);
 	}
 );

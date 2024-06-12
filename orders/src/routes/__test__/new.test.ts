@@ -4,6 +4,7 @@ import { signin } from "../../test/setup";
 import { Ticket } from "../../models/ticket";
 import mongoose from "mongoose";
 import { Order, OrderStatus } from "../../models/order";
+import { natsWrapper } from "../../nats-wrapper";
 
 it("has a route handler listening to /api/orders for POST requests", async () => {
 	const response = await request(app).post("/api/orders").send({});
@@ -87,4 +88,23 @@ it("reserves a ticket", async () => {
 		.expect(201);
 });
 
-it.todo("emits an order created event");
+it("emits an order created event", async () => {
+	const cookie = signin();
+
+	const ticket = new Ticket({
+		title: "concert",
+		price: 20,
+	});
+	await ticket.save();
+
+	await request(app)
+		.post("/api/orders")
+		.set("Cookie", cookie)
+		.send({
+			ticketId: ticket.id,
+		})
+		.expect(201);
+
+	// async publish() method test is not working
+	expect(natsWrapper.connection.jetstream).toHaveBeenCalled();
+});

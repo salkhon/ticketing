@@ -7,6 +7,8 @@ import {
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { Order } from "../models/order";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -33,6 +35,13 @@ router.patch(
 
 		order.status = OrderStatus.CANCELLED;
 		await order.save();
+
+		new OrderCancelledPublisher(natsWrapper.connection).publish({
+			id: order.id,
+			ticket: {
+				id: order.ticket.id.toString(),
+			},
+		});
 
 		res.status(200).send(order);
 	}
