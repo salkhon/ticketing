@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { Order, OrderStatus } from "./order";
 
 export interface ITicket {
-	id: string;
 	title: string;
 	price: number;
 
@@ -14,10 +13,6 @@ export interface ITicket {
 
 const ticketSchema = new mongoose.Schema<ITicket>(
 	{
-		id: {
-			type: String,
-			required: true,
-		},
 		title: {
 			type: String,
 			required: true,

@@ -4,22 +4,21 @@ import {
 	TicketCreatedEvent,
 } from "@salkhon-ticketing/common";
 import { JsMsg } from "nats";
-import { orderServiceDurableName } from "./durable-name";
+import { orderServiceTicketCreated } from "./durable-name";
 import { Ticket } from "../../models/ticket";
 
 export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
 	readonly subject = Subject.TicketCreated;
-	readonly durableName = orderServiceDurableName;
+	readonly durableName = orderServiceTicketCreated;
 
 	async onMessage(data: TicketCreatedEvent["data"], message: JsMsg) {
 		const { id, title, price } = data;
 		const ticket = new Ticket({
-			id,
+			_id: id, // same id as the ticket service
 			title,
 			price,
 		});
-		// todo: check if _id and id are the same
-		console.log("ticket", ticket, ticket.id, ticket._id);
+		console.log(ticket);
 		await ticket.save();
 
 		message.ack();
