@@ -30,6 +30,7 @@ router.post(
 		// this is because the model may have sanitized the data via a mongoose pre-save hook
 		await new TicketCreatedPublisher(natsWrapper.connection).publish({
 			id: ticket.id,
+			version: ticket.version,
 			title: ticket.title,
 			price: ticket.price,
 			userId: ticket.userId,

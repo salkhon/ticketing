@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 import { OrderStatus } from "@salkhon-ticketing/common";
 
 // TS side
-interface IOrder {
+interface IOrder extends mongoose.Document {
 	userId: string;
+	version: number;
 	status: OrderStatus;
 	expiresAt: Date;
 	ticket: mongoose.Types.ObjectId;
@@ -41,6 +42,8 @@ const orderSchema = new mongoose.Schema<IOrder>(
 		},
 	}
 );
+
+orderSchema.set("versionKey", "version");
 
 export const Order = mongoose.model<IOrder>("Order", orderSchema);
 export { OrderStatus };

@@ -38,6 +38,7 @@ router.patch(
 
 		new OrderCancelledPublisher(natsWrapper.connection).publish({
 			id: order.id,
+			version: order.version,
 			ticket: {
 				id: order.ticket.id.toString(),
 			},

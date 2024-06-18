@@ -12,12 +12,13 @@ export class TicketUpdatedLister extends Listener<TicketUpdatedEvent> {
 	readonly durableName = orderServiceTicketUpdated;
 
 	async onMessage(data: TicketUpdatedEvent["data"], message: JsMsg) {
-		const ticket = await Ticket.findById(data.id);
+		const { id, version, title, price } = data;
+		const ticket = await Ticket.findByEvent({ id, version });
+
 		if (!ticket) {
 			throw new Error("Ticket not found");
 		}
 
-		const { title, price } = data;
 		ticket.set({
 			title,
 			price,
