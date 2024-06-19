@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
 import { app } from "./app";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
+import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener";
 
 /**
  * Setup environment variables, connect to external services and start the app
@@ -32,6 +34,10 @@ async function start() {
 		// graceful NATS drain on service termination
 		process.on("SIGINT", () => natsWrapper.drain());
 		process.on("SIGTERM", () => natsWrapper.drain());
+
+		// listen for events
+		new OrderCreatedListener(natsWrapper.connection).listen();
+		new OrderCancelledListener(natsWrapper.connection).listen();
 
 		// connect to mongodb pod services using service name:port as URL/database
 		await mongoose.connect(process.env.MONGO_URI);

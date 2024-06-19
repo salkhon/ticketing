@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
-interface ITicket {
+interface ITicket extends mongoose.Document {
 	title: string; // TS type
 	price: number;
 	userId: string;
 	version: number;
+	orderId?: string; // optional
 }
 
 const ticketSchema = new mongoose.Schema<ITicket>(
@@ -22,6 +23,9 @@ const ticketSchema = new mongoose.Schema<ITicket>(
 		userId: {
 			type: String,
 			required: true,
+		},
+		orderId: {
+			type: String,
 		},
 	},
 	{

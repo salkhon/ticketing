@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { OrderStatus } from "@salkhon-ticketing/common";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 // TS side
 interface IOrder extends mongoose.Document {
@@ -44,6 +45,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
 );
 
 orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 export const Order = mongoose.model<IOrder>("Order", orderSchema);
 export { OrderStatus };
