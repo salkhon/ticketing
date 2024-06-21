@@ -19,7 +19,7 @@ class NATSWrapper {
 				name: clusterName,
 			});
 			const jsm = await this.nc.jetstreamManager();
-			await jsm.streams.add({ name: "EVENTS", subjects: [Subject.Ticket] });
+			await jsm.streams.add({ name: "EVENTS", subjects: [Subject.Event] });
 
 			console.log("Connected to NATS");
 		} catch (error) {
