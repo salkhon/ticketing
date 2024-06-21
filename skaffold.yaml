@@ -36,6 +36,14 @@ build:
             dest: .
       docker:
         dockerfile: Dockerfile
+    - image: salkhon/ticketing-expiration
+      context: expiration
+      sync:
+        manual:
+          - src: src/**/*.ts
+            dest: .
+      docker:
+        dockerfile: Dockerfile
   local:
     push: false
 manifests:
