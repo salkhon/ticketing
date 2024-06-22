@@ -18,7 +18,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@salkhon-ticketing/common": "^1.0.29",
+		"@salkhon-ticketing/common": "^1.0.30",
 		"@types/bull": "^4.10.0",
 		"bull": "^4.13.1",
 		"nats": "^2.23.0",

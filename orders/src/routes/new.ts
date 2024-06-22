@@ -11,7 +11,7 @@ import { Order } from "../models/order";
 import { natsWrapper } from "../nats-wrapper";
 import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 
-const EXPIRATION_WINDOW_SECONDS = 15; // should be (env variable/in admin DB) to avoid deploying on every change
+const EXPIRATION_WINDOW_MINS = 1; // should be (env variable/in admin DB) to avoid deploying on every change
 
 const router = express.Router();
 
@@ -43,9 +43,7 @@ router.post(
 
 		// calculate expiration date
 		const expiration = new Date();
-		expiration.setSeconds(
-			expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS * 60
-		);
+		expiration.setMinutes(expiration.getMinutes() + EXPIRATION_WINDOW_MINS);
 
 		// save order
 		const order = new Order({

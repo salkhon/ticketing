@@ -12,10 +12,17 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 	readonly durableName = orderCreatedDurableName;
 
 	async onMessage(data: OrderCreatedEvent["data"], msg: JsMsg) {
-		await expirationQueue.add({
-			orderId: data.id,
-		});
+		const delay = new Date(data.expiresAt).getTime() - new Date().getTime();
 
-    msg.ack();
+		await expirationQueue.add(
+			{
+				orderId: data.id,
+			},
+			{
+				delay: delay,
+			}
+		);
+
+		msg.ack();
 	}
 }
