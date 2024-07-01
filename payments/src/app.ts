@@ -6,6 +6,7 @@ import {
 	NotFoundError,
 	currentUser,
 } from "@salkhon-ticketing/common";
+import { createChargeRouter } from "./routes/new";
 
 export const app = express();
 
@@ -22,6 +23,7 @@ app.use(
 app.use(currentUser); // must be after cookieSession, so that it can check the cookie
 
 // Route handlers
+app.use(createChargeRouter);
 app.all("*", async () => {
 	throw new NotFoundError();
 });

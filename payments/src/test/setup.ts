@@ -18,9 +18,9 @@ beforeAll(async () => {
 
 // hook function that runs before each test
 beforeEach(async () => {
-  // reset all mocks (to accurately test the number of times a function was called)
-  jest.clearAllMocks();
-  
+	// reset all mocks (to accurately test the number of times a function was called)
+	jest.clearAllMocks();
+
 	// delete all collections
 	const collections = await mongoose.connection.db.collections();
 	for (let collection of collections) {
@@ -41,10 +41,10 @@ export function generateId() {
 }
 
 // test utility function to sign up a user and get cookie for supertest (as you would get on the request header)
-export function signin() {
+export function signin(id?: string) {
 	// Build a JWT payload. {id, email}
 	const payload = {
-		id: generateId(),
+		id: id ?? generateId(),
 		email: "test@test.com",
 	};
 
