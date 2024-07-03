@@ -22,6 +22,9 @@ async function start() {
 	if (!process.env.NATS_URL) {
 		throw new Error("NATS_URL must be defined");
 	}
+	if (!process.env.STRIPE_KEY) {
+		throw new Error("STRIPE_KEY must be defined");
+	}
 
 	try {
 		// cluster name and url depends on the nats.yaml file used to setup the NATS depl and service

@@ -4,25 +4,18 @@ import {
 	NotFoundError,
 	OrderStatus,
 	requireAuth,
-	validateRequest,
 } from "@salkhon-ticketing/common";
 import express, { Request, Response } from "express";
-import { body } from "express-validator";
 import { Order } from "../models/order";
+import { stripe } from "../stripe";
 
 const router = express.Router();
 
-router.post(
-	"/api/payments",
+router.get(
+	"/api/payments/:orderId",
 	requireAuth,
-	[
-		body("token").not().isEmpty().withMessage("token must be provided"),
-		body("orderId").not().isEmpty().withMessage("orderId must be provided"),
-	],
-	validateRequest,
 	async (req: Request, res: Response) => {
-		const { token, orderId } = req.body;
-
+		const { orderId } = req.params;
 		const order = await Order.findById(orderId);
 
 		if (!order) {
@@ -34,9 +27,18 @@ router.post(
 		if (order.status === OrderStatus.CANCELLED) {
 			throw new BadRequestError("Cannot pay for a cancelled order");
 		}
+		if (!order.paymentIntentId) {
+			throw new BadRequestError("Payment intent not found");
+		}
 
-		res.send({ success: true });
+		const paymentIntent = await stripe.paymentIntents.retrieve(
+			order.paymentIntentId
+		);
+
+		res.send({
+			clientSecret: paymentIntent.client_secret,
+		});
 	}
 );
 
-export { router as createChargeRouter };
+export { router as getClientSecretRouter };
