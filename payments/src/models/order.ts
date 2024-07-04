@@ -9,7 +9,7 @@ interface IOrder extends mongoose.Document {
 	version: number;
 	status: OrderStatus;
 	price: number;
-  paymentIntentId?: string;
+	paymentIntentId: string;
 }
 
 // provides type checking for static methods
@@ -43,9 +43,10 @@ const orderSchema = new mongoose.Schema<IOrder>(
 			type: Number,
 			required: true,
 		},
-    paymentIntentId: {
-      type: String,
-    },
+		paymentIntentId: {
+			type: String,
+			required: true,
+		},
 	},
 	{
 		toJSON: {

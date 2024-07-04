@@ -7,6 +7,7 @@ import {
 import { orderCancelledDurableName } from "./durable-name";
 import { JsMsg } from "nats";
 import { Order } from "../../models/order";
+import { stripe } from "../../stripe";
 
 export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
 	readonly subject = Subject.OrderCancelled;
@@ -23,6 +24,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
 			order.status === OrderStatus.CREATED ||
 			order.status === OrderStatus.AWAITING_PAYMENT
 		) {
+			await stripe.paymentIntents.cancel(order.paymentIntentId);
 			order.set({ status: OrderStatus.CANCELLED });
 			await order.save();
 		}

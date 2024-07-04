@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 jest.mock("../nats-wrapper.ts"); // redirect all imports of the 'nats-wrapper' module to the mock file
+jest.mock("../stripe.ts"); // redirect all imports of the 'stripe' module to the mock file
 
 let mongo: MongoMemoryServer;
 

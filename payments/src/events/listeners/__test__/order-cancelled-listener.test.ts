@@ -4,16 +4,25 @@ import mongoose from "mongoose";
 import { JsMsg } from "nats";
 import { OrderCancelledListener } from "../order-cancelled-listener";
 import { Order } from "../../../models/order";
+import { stripe } from "../../../stripe";
 
 async function setup() {
 	const listener = new OrderCancelledListener(natsWrapper.connection);
 
+	const paymentIntent = await stripe.paymentIntents.create({
+		amount: 10 * 100,
+		currency: "usd",
+		metadata: {
+			orderId: new mongoose.Types.ObjectId().toHexString(),
+		},
+	});
 	const order = new Order({
 		id: new mongoose.Types.ObjectId().toHexString(),
 		version: 0,
 		status: OrderStatus.CREATED,
 		userId: new mongoose.Types.ObjectId().toHexString(),
 		price: 10,
+		paymentIntentId: paymentIntent.id,
 	});
 	await order.save();
 
