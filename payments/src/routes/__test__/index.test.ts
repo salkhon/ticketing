@@ -72,6 +72,10 @@ it("returns Payment Intent Client Secret when purchasing an order", async () => 
 		.send()
 		.expect(200);
 
+	expect(stripe.paymentIntents.retrieve).toHaveBeenCalled();
+	expect(stripe.paymentIntents.retrieve).toHaveBeenCalledWith(
+		order.paymentIntentId
+	);
 	expect(response.body.clientSecret).toBeDefined();
 	expect(response.body.clientSecret).toEqual("mocked_client_secret");
 });

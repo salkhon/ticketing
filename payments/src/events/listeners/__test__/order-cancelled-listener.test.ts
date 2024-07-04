@@ -52,6 +52,24 @@ it("updates the status of the order", async () => {
 	expect(updatedOrder?.status).toEqual(OrderStatus.CANCELLED);
 });
 
+it("updates the version of the order", async () => {
+	const { listener, order, cancelledOrderData, message } = await setup();
+
+	await listener.onMessage(cancelledOrderData, message);
+
+	const updatedOrder = await Order.findById(order.id);
+
+	expect(updatedOrder?.version).toEqual(order.version + 1);
+});
+
+it("cancels the payment intent", async () => {
+	const { listener, order, cancelledOrderData, message } = await setup();
+
+	await listener.onMessage(cancelledOrderData, message);
+
+	expect(stripe.paymentIntents.cancel).toHaveBeenCalled();
+});
+
 it("acks the message", async () => {
 	const { listener, cancelledOrderData, message } = await setup();
 

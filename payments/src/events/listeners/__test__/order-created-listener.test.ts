@@ -4,6 +4,7 @@ import { OrderCreatedListener } from "../order-created-listener";
 import mongoose from "mongoose";
 import { JsMsg } from "nats";
 import { Order } from "../../../models/order";
+import { stripe } from "../../../stripe";
 
 function setup() {
 	const listener = new OrderCreatedListener(natsWrapper.connection);
@@ -40,6 +41,24 @@ it("replicates the order info", async () => {
 	expect(order?.status).toBe(orderData.status);
 	expect(order?.userId).toBe(orderData.userId);
 	expect(order?.version).toBe(orderData.version);
+});
+
+it("creates order payment intent", async () => {
+	const { listener, orderData, message } = setup();
+
+	await listener.onMessage(orderData, message);
+
+	const order = await Order.findById(orderData.id);
+
+	expect(stripe.paymentIntents.create).toHaveBeenCalled();
+	expect(stripe.paymentIntents.create).toHaveBeenCalledWith({
+		amount: orderData.ticket.price * 100,
+		currency: "usd",
+		metadata: {
+			orderId: orderData.id,
+		},
+	});
+	expect(order?.paymentIntentId).toBeDefined();
 });
 
 it("acks the message", async () => {
