@@ -4,6 +4,7 @@ import { app } from "./app";
 import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
 import { TicketUpdatedLister } from "./events/listeners/ticket-updated-listener";
 import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
+import { PaymentCreatedListener } from "./events/listeners/payment-created-listener";
 
 /**
  * Setup environment variables, connect to external services and start the app
@@ -40,6 +41,7 @@ async function start() {
 		new TicketCreatedListener(natsWrapper.connection).listen();
 		new TicketUpdatedLister(natsWrapper.connection).listen();
 		new ExpirationCompleteListener(natsWrapper.connection).listen();
+		new PaymentCreatedListener(natsWrapper.connection).listen();
 
 		// connect to mongodb pod services using service name:port as URL/database
 		await mongoose.connect(process.env.MONGO_URI);

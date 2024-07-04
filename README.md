@@ -35,7 +35,11 @@ A microservices based ticketing system built with Node.js, Express, MongoDB, and
 
 1. Clone the repository
 2. Install dependencies
-3. Start the application
+3. Setup Kubernetes stuff
+4. Port forward to NATS Streaming Server
+5. Install stripe CLI
+6. Port forward stripe webhook
+7. Start the application
 
 ```bash
 git clone

@@ -6,7 +6,7 @@ import {
 	NotFoundError,
 	currentUser,
 } from "@salkhon-ticketing/common";
-import { getClientSecretRouter } from "./routes";
+import { paymentRouter } from "./routes";
 
 export const app = express();
 
@@ -23,7 +23,7 @@ app.use(
 app.use(currentUser); // must be after cookieSession, so that it can check the cookie
 
 // Route handlers
-app.use(getClientSecretRouter);
+app.use(paymentRouter);
 app.all("*", async () => {
 	throw new NotFoundError();
 });
