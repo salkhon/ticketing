@@ -1,7 +1,6 @@
-"use server";
+"use server"; // server actions
 import { revalidateTag } from "next/cache";
 
-export default async function currentUserRevalidate() {
+export default async function revalidateCurrentUserTag() {
 	revalidateTag("currentuser");
-	return {};
 }

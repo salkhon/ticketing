@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import useRequest from "../../hooks/use-request";
 import { useEffect } from "react";
-import currentUserRevalidate from "../actions";
+import revalidateCurrentUserTag from "../actions";
 
 export default function SignOut() {
 	const router = useRouter();
@@ -14,7 +14,7 @@ export default function SignOut() {
 
 	useEffect(() => {
 		const signOut = async () => {
-			await currentUserRevalidate(); // revalidate current user path
+			await revalidateCurrentUserTag(); // revalidate current user cache on server
 			doRequest({});
 		};
 		signOut();

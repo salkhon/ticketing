@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
 import useRequest from "../../hooks/use-request";
-import currentUserRevalidate from "../actions";
+import revalidateCurrentUserTag from "../actions";
 
 export default function AuthForm({
 	title,
@@ -25,7 +25,7 @@ export default function AuthForm({
 		event.preventDefault();
 		const email = emailRef.current!.value;
 		const password = passwordRef.current!.value;
-		await currentUserRevalidate();
+		await revalidateCurrentUserTag();
 		doRequest({ email, password });
 	}
 
