@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navigation from "./components/Navigation";
 
 export const metadata: Metadata = {
 	title: "Ticketing App",
@@ -14,7 +15,8 @@ export default async function RootLayout({
 	return (
 		<html lang="en">
 			<body suppressHydrationWarning={true}>
-				{children}
+				<Navigation />
+				<main className="container mx-auto px-4">{children}</main>
 			</body>
 		</html>
 	);

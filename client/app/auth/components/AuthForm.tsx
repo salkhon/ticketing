@@ -18,7 +18,10 @@ export default function AuthForm({
 	const { doRequest, errors } = useRequest({
 		url: postUrl,
 		method: "POST",
-		onSuccess: () => router.push("/"),
+		onSuccess: () => {
+			router.push("/");
+			router.refresh();
+		},
 	});
 
 	async function onFormSubmit(event: React.FormEvent<HTMLFormElement>) {

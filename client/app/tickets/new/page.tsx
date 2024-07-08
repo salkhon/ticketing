@@ -2,13 +2,17 @@
 import { FormEvent } from "react";
 import useRequest from "../../hooks/use-request";
 import { useRouter } from "next/navigation";
+import { revalidateTag } from "next/cache";
 
 export default function NewTicket() {
 	const router = useRouter();
 	const { doRequest, errors } = useRequest({
 		url: "/api/tickets",
 		method: "POST",
-		onSuccess: () => router.push("/"),
+		onSuccess: () => {
+			router.push("/");
+			revalidateTag("tickets");
+		},
 	});
 
 	function onSubmit(event: FormEvent<HTMLFormElement>) {

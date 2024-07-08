@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getCurrentUser } from "../data/GET";
+import { getCurrentUser } from "../services/api/users/currentuser/GET";
 
 export default async function Navigation() {
 	const currentUser = await getCurrentUser();

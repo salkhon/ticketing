@@ -9,7 +9,10 @@ export default function SignOut() {
 	const { doRequest } = useRequest({
 		url: "/api/users/signout",
 		method: "POST",
-    onSuccess: () => router.push("/"),
+		onSuccess: () => {
+			router.push("/");
+			router.refresh();
+		},
 	});
 
 	useEffect(() => {
