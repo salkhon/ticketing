@@ -1,19 +1,32 @@
 import React from "react";
-import { getCurrentUser } from "./data/getCurrentUser";
+import { getTickets } from "./data/GET";
 import Navigation from "./components/Navigation";
 
 export default async function App() {
-	const currentUser = await getCurrentUser();
+	const tickets = await getTickets();
 
 	return (
 		<>
-			<Navigation currentUser={currentUser} />
-			<h1 className="text-3xl">Landing Page</h1>
-			{currentUser ? (
-				<h2>You are signed in as {currentUser.email}</h2>
-			) : (
-				<h2>You are not signed in</h2>
-			)}
+			<Navigation />
+			<h1 className="text-3xl">Tickets</h1>
+			<div>
+				<table className="table-auto border-collapse w-full mt-4 text-left border">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						{tickets.map((ticket) => (
+							<tr key={ticket.id}>
+								<td>{ticket.title}</td>
+								<td>{ticket.price}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</>
 	);
 }

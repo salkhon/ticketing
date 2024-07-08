@@ -2,6 +2,8 @@
 import { useState } from "react";
 import "../globals.css";
 
+// request from client side to indepedent server
+// todo: replace with tanstack query (client side caching)
 export default function useRequest({
 	url,
 	method,
