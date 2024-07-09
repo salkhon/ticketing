@@ -13,6 +13,8 @@ export default async function Navigation() {
 			<div className="flex justify-end space-x-5">
 				{!!currentUser ? (
 					<>
+						<Link href="/tickets/new">Sell Tickets</Link>
+						<Link href="/orders">Orders</Link>
 						<span>{currentUser.email}</span>
 						<Link href="/auth/signout">Sign Out</Link>
 					</>

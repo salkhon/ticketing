@@ -1,4 +1,4 @@
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 export async function getSpecificOrder(id: string): Promise<{
 	id: string;

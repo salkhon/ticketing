@@ -11,14 +11,6 @@ export default async function App() {
 		<>
 			<div className="flex justify-between items-center">
 				<h1 className="text-3xl">Tickets</h1>
-				{!!currentUser && (
-					<Link
-						href="/tickets/new"
-						className="text-xl outline-dashed outline-2 outline-black p-1"
-					>
-						New
-					</Link>
-				)}
 			</div>
 			<div className="relative overflow-x-auto">
 				<table className=" table-auto border-collapse border border-slate-500 w-full mt-4 text-left text-gray-500">

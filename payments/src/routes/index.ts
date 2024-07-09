@@ -10,7 +10,6 @@ import { Order } from "../models/order";
 import { stripe } from "../stripe";
 import { PaymentCreatedPublisher } from "../events/publishers/payment-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
-import Stripe from "stripe";
 
 const STRIPE_PAYMENT_SUCCESS_EVENT = "payment_intent.succeeded";
 
@@ -47,14 +46,22 @@ router.get(
 );
 
 router.post("/api/payments/webhook", async (req: Request, res: Response) => {
-	const event = req.body;
+  const event = req.body;
 
 	if (event.type === STRIPE_PAYMENT_SUCCESS_EVENT) {
-		const paymentIntent: Stripe.PaymentIntent = event.data.object;
-		console.log(event.data);
+		const paymentIntentId: string = event.paymentIntentId;
+
+		const order = await Order.findOne({ paymentIntentId });
+		if (!order) {
+			throw new NotFoundError();
+		}
+
+		order.set({ status: OrderStatus.COMPLETED });
+		await order.save();
+
 		await new PaymentCreatedPublisher(natsWrapper.connection).publish({
-			id: paymentIntent.id,
-			orderId: paymentIntent.metadata.orderId,
+			id: paymentIntentId,
+			orderId: order.id,
 		});
 	}
 
