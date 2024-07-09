@@ -1,5 +1,4 @@
 "use server";
-
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
@@ -7,7 +6,7 @@ import { cookies } from "next/headers";
 //* allows form page to be a server component (does not have to use event handlers)
 export async function createOrder(prevState: any, form: FormData) {
 	const data = { ticketId: form.get("ticketId") };
-	const session = cookies().get("session").value;
+	const session = cookies().get("session");
 
 	const response = await fetch(
 		"http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/orders",
@@ -16,15 +15,21 @@ export async function createOrder(prevState: any, form: FormData) {
 			body: JSON.stringify(data),
 			headers: {
 				"Content-Type": "application/json",
-				Cookie: `session=${session}`,
+				Cookie: `session=${session?.value};path=/;domain=https://ticketing.dev;secure;httponly`,
 			},
 		}
 	);
 
 	if (!response.ok) {
 		return await response.text();
-	} else {
-		const order = await response.json();
-		redirect(`/orders/${order.id}?expires=${order.expiresAt}`);
 	}
+
+	const order = await response.json();
+	cookies().set("session", session.value, {
+		path: "/",
+		domain: "https://ticketing.dev",
+    secure: true,
+    httpOnly: true,
+	});
+	redirect(`/orders/${order.id}`);
 }

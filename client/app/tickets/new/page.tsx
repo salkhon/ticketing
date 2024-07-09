@@ -2,7 +2,7 @@
 import { FormEvent } from "react";
 import useRequest from "../../hooks/use-request";
 import { useRouter } from "next/navigation";
-import { revalidateTag } from "next/cache";
+import { revalidateTicketsTag } from "../../actions";
 
 export default function NewTicket() {
 	const router = useRouter();
@@ -11,16 +11,16 @@ export default function NewTicket() {
 		method: "POST",
 		onSuccess: () => {
 			router.push("/");
-			revalidateTag("tickets");
 		},
 	});
 
-	function onSubmit(event: FormEvent<HTMLFormElement>) {
+	async function onSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		doRequest({
 			title: event.target["title"].value,
 			price: parseFloat(event.target["price"].value),
 		});
+		await revalidateTicketsTag();
 	}
 
 	return (

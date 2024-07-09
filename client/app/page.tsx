@@ -1,20 +1,24 @@
 import React from "react";
 import Link from "next/link";
 import { getTickets } from "./services/api/tickets/GET";
+import { getCurrentUser } from "./services/api/users/currentuser/GET";
 
 export default async function App() {
 	const tickets = await getTickets();
+	const currentUser = await getCurrentUser();
 
 	return (
 		<>
 			<div className="flex justify-between items-center">
 				<h1 className="text-3xl">Tickets</h1>
-				<Link
-					href="/tickets/new"
-					className="text-xl outline-dashed outline-2 outline-black p-1"
-				>
-					New
-				</Link>
+				{!!currentUser && (
+					<Link
+						href="/tickets/new"
+						className="text-xl outline-dashed outline-2 outline-black p-1"
+					>
+						New
+					</Link>
+				)}
 			</div>
 			<div className="relative overflow-x-auto">
 				<table className=" table-auto border-collapse border border-slate-500 w-full mt-4 text-left text-gray-500">

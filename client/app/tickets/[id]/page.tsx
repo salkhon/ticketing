@@ -13,7 +13,7 @@ export default async function TicketShow({
 		<div className="m-4">
 			<div>
 				<h1 className="text-3xl font-bold">{ticket.title}</h1>
-				<h4 className="text-xl text-gray-600">Price: {ticket.price}</h4>
+				<h4 className="text-xl text-gray-600">${ticket.price}</h4>
 			</div>
 
 			{/* client component */}

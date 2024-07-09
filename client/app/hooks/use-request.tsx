@@ -35,6 +35,7 @@ export default function useRequest({
 			}
 			return resp.json();
 		} catch (err) {
+			console.error(err);
 			setErrors(
 				<div className="border rounded-lg border-red-500 p-3 mb-2">
 					<h4 className="text-red-500">Ooops...</h4>
