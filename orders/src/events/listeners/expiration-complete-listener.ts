@@ -35,7 +35,9 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
 					id: order.ticket.id.toString(),
 				},
 			});
-		}
+		} else {
+      console.log(`Order status is ${order.status}, ignoring expiration`);
+    }
 
 		msg.ack();
 	}

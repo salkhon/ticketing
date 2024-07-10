@@ -15,7 +15,7 @@ export default function useRequest({
 }) {
 	const [errors, setErrors] = useState(null);
 
-	async function doRequest(body: object) {
+	async function doRequest(body?: object) {
 		try {
 			const resp = await fetch(url, {
 				method,
@@ -35,12 +35,11 @@ export default function useRequest({
 			}
 			return resp.json();
 		} catch (err) {
-			console.error(err);
 			setErrors(
 				<div className="border rounded-lg border-red-500 p-3 mb-2">
 					<h4 className="text-red-500">Ooops...</h4>
 					<ul className="list-disc ml-7 text-red-500">
-						{err.errors.map((err, idx) => (
+						{err.errors?.map((err, idx) => (
 							<li key={idx}>{err.message}</li>
 						))}
 					</ul>

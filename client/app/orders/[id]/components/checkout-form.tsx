@@ -35,24 +35,9 @@ export default function StripeCheckoutForm({
 			return;
 		}
 
-		stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-			console.log("paymentintent", paymentIntent);
-			setPaymentIntentId(paymentIntent.id);
-			switch (paymentIntent.status) {
-				case "succeeded":
-					setMessage("Payment succeeded!");
-					break;
-				case "processing":
-					setMessage("Your payment is processing.");
-					break;
-				case "requires_payment_method":
-					setMessage("Your payment was not successful, please try again.");
-					break;
-				default:
-					setMessage("Something went wrong.");
-					break;
-			}
-		});
+		stripe
+			.retrievePaymentIntent(clientSecret)
+			.then(({ paymentIntent }) => setPaymentIntentId(paymentIntent.id));
 	}, [stripe]);
 
 	const handleSubmit = async (e) => {
@@ -66,8 +51,8 @@ export default function StripeCheckoutForm({
 
 		setIsLoading(true);
 
-		// todo: Stripe automatically handles, this is for local testing
-		await doRequest({
+		// todo: Stripe automatically handles webhook, manually calling for local testing
+		doRequest({
 			type: STRIPE_PAYMENT_SUCCESS_EVENT,
 			paymentIntentId: paymentIntentId,
 		});
@@ -111,7 +96,11 @@ export default function StripeCheckoutForm({
 				</span>
 			</button>
 			{/* Show any error or success messages */}
-			{message && <div id="payment-message">{message}</div>}
+			{!!message && (
+				<div id="payment-message" className="mt-4">
+					{message}
+				</div>
+			)}
 		</form>
 	);
 }

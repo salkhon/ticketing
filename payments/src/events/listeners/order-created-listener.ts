@@ -19,6 +19,9 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 			metadata: {
 				orderId: data.id,
 			},
+			automatic_payment_methods: {
+				enabled: true,
+			},
 		});
 
 		const order = new Order({

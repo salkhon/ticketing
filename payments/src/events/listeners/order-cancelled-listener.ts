@@ -27,9 +27,9 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
 			await stripe.paymentIntents.cancel(order.paymentIntentId);
 			order.set({ status: OrderStatus.CANCELLED });
 			await order.save();
-		} {
-      console.log("Order already paid for, not cancelling payment.");
-    }
+		} else {
+			console.log(`Order status is ${order.status}, ignoring expiration`);
+		}
 
 		message.ack();
 	}

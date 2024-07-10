@@ -7,6 +7,9 @@ module.exports = {
 
     // Or if using `src` directory:
     './src/**/*.{js,ts,jsx,tsx,mdx}',
+
+    // Add flowbite-react to the content
+    "./node_modules/flowbite-react/lib/**/*.js",
   ],
   theme: {
     extend: {},

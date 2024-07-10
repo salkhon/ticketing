@@ -1,17 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function OrderTimer({ expiresAt }: { expiresAt: string }) {
+export default function PaymentTimer({
+	expiresAt,
+	setExpired,
+}: {
+	expiresAt: string;
+	setExpired: (expired: boolean) => void;
+}) {
 	function calculateTimeLeft() {
-		return new Date(expiresAt).getTime() - new Date().getTime();
+		return Math.round(
+			(new Date(expiresAt).getTime() - new Date().getTime()) / 1000
+		);
 	}
 
 	const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
 	useEffect(() => {
 		function findTimeLeft() {
-			const msLeft = calculateTimeLeft();
-			setTimeLeft(Math.round(msLeft / 1000));
+			const secondsLeft = calculateTimeLeft();
+			setTimeLeft(secondsLeft);
+
+			if (secondsLeft <= 0) setExpired(true);
 		}
 
 		findTimeLeft();
@@ -23,9 +33,11 @@ export default function OrderTimer({ expiresAt }: { expiresAt: string }) {
 	return (
 		<div>
 			<h4 className="text-xl text-gray-600" suppressHydrationWarning>
-				{timeLeft > 0
-					? `Time left to purchase: ${timeLeft} seconds`
-					: "Order Expired"}
+				{timeLeft > 0 ? (
+					`Time left to purchase: ${timeLeft} seconds`
+				) : (
+					<span className="text-red-600">Order Expired</span>
+				)}
 			</h4>
 		</div>
 	);
