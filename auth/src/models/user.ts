@@ -5,7 +5,6 @@ import { Password } from "../services/password";
  * @deprecated
  * These are **LEGACY** boilerplate code to enhace mongoose models with TypeScript typing
  */
-
 const userSchema = new mongoose.Schema(
 	{
 		email: {
